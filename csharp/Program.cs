@@ -12,6 +12,7 @@ var completion_tokens = 0;
 var history = new List<Message>();
 
 // Step 2 - Get the OpenAI credentials
+// TODO: Modify the .env file with the URI and KEY
 DotEnv.Load();
 var api_key = Environment.GetEnvironmentVariable("OPENAI_KEY");
 var uri = Environment.GetEnvironmentVariable("OPENAI_URI");
