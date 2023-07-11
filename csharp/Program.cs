@@ -77,6 +77,8 @@ async Task<Tuple<string?, int, int, int>> GetCompletionAsync(List<Message> histo
     var prompt = new Prompt(history, 100, 0.3d);
     var json = JsonSerializer.Serialize(prompt);
     var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+    // Note: We could have retry logic here
     var response = await client.PostAsync(new Uri(uri), content);
 
     if (!response.IsSuccessStatusCode)
