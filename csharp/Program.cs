@@ -4,7 +4,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using dotenv.net;
 
-// Step 1 - Some setup 
+// Step 1 - Some setup
+// Note: Take a look at the request.http file from VS code to see how to POST using REST client and build the supporting objects
 const string SYSTEM_MESSAGE = "You are a general assistant";
 var prompt_tokens = 0;
 var completion_tokens = 0;
