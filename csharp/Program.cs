@@ -17,6 +17,7 @@ var api_key = Environment.GetEnvironmentVariable("OPENAI_KEY");
 var uri = Environment.GetEnvironmentVariable("OPENAI_URI");
 if (api_key is null || uri is null)
 {
+    Console.WriteLine("Please add the OPENAI_KEY and OPENAI_URI to the .env file and run again.");
     return;
 }
 
