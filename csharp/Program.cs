@@ -5,6 +5,59 @@ using System.Text.Json.Serialization;
 using dotenv.net;
 
 // Step 1 - Some setup 
+public record Message([property: JsonPropertyName("role")] string Role,
+    [property: JsonPropertyName("content")] string Content);
+
+public record Prompt([property: JsonPropertyName("messages")] List<Message> Messages,
+    [property: JsonPropertyName("max_tokens")] int Max_tokens,
+    [property: JsonPropertyName("temperature")] double temperature);
+
+public record Choice([property: JsonPropertyName("role")] int Index,
+    [property: JsonPropertyName("finish_reason")] string FinishReason,
+    [property: JsonPropertyName("message")] Message Message);
+
+public record Usage([property: JsonPropertyName("completion_tokens")] int CompletionTokens,
+    [property: JsonPropertyName("prompt_tokens")] int PromptTokens,
+    [property: JsonPropertyName("total_tokens")] int TotalTokens);
+
+public record Completion(
+    [property: JsonPropertyName("role")] string Id,
+    [property: JsonPropertyName("object")] string Object,
+    [property: JsonPropertyName("created")] long Created,
+    [property: JsonPropertyName("model")] string Model,
+    [property: JsonPropertyName("choices")] List<Choice> Choices,
+    [property: JsonPropertyName("usage")] Usage Usage);
+
+async Task<Tuple<string?, int, int, int>> GetCompletionAsync(List<Message> history)
+{
+    var prompt = new Prompt(history, 100, 0.3d);
+    var json = JsonSerializer.Serialize(prompt);
+    var content = new StringContent(json, Encoding.UTF8, "application/json");
+    var response = await client.PostAsync(new Uri(uri), content);
+
+    if (!response.IsSuccessStatusCode)
+    {
+        Console.WriteLine($"Error: {response.StatusCode}");
+        return new Tuple<string?, int, int, int>(null, 0, 0, 0);
+    }
+
+    var completion = await response.Content.ReadAsStringAsync();
+    var completionObject = JsonSerializer.Deserialize<Completion>(completion);
+
+    if (completionObject is not null)
+    {
+        var choice = completionObject.Choices[0];
+        if (choice is not null)
+        {
+            return new Tuple<string?, int, int, int>(choice.Message.Content,
+                completionObject.Usage.CompletionTokens,
+                completionObject.Usage.PromptTokens,
+                completionObject.Usage.TotalTokens);
+        }
+    }
+    return new Tuple<string?, int, int, int>(null, 0, 0, 0); ;
+}
+
 const string SYSTEM_MESSAGE = "You are a general assistant";
 var prompt_tokens = 0;
 var completion_tokens = 0;
@@ -67,66 +120,3 @@ while (true)
     }
 }
 return;
-
-
-#region Helper Methods
-
-async Task<Tuple<string?, int, int, int>> GetCompletionAsync(List<Message> history)
-{
-    var prompt = new Prompt(history, 100, 0.3d);
-    var json = JsonSerializer.Serialize(prompt);
-    var content = new StringContent(json, Encoding.UTF8, "application/json");
-    var response = await client.PostAsync(new Uri(uri), content);
-
-    if (!response.IsSuccessStatusCode)
-    {
-        Console.WriteLine($"Error: {response.StatusCode}");
-        return new Tuple<string?, int, int, int>(null, 0, 0, 0);
-    }
-
-    var completion = await response.Content.ReadAsStringAsync();
-    var completionObject = JsonSerializer.Deserialize<Completion>(completion);
-
-    if (completionObject is not null)
-    {
-        var choice = completionObject.Choices[0];
-        if (choice is not null)
-        {
-            return new Tuple<string?, int, int, int>(choice.Message.Content,
-                completionObject.Usage.CompletionTokens,
-                completionObject.Usage.PromptTokens,
-                completionObject.Usage.TotalTokens);
-        }
-    }
-    return new Tuple<string?, int, int, int>(null, 0, 0, 0); ;
-}
-
-#endregion Helper Methods
-
-#region Records
-
-// Utility Records. Records are Immutable
-public record Message([property: JsonPropertyName("role")] string Role,
-    [property: JsonPropertyName("content")] string Content);
-
-public record Prompt([property: JsonPropertyName("messages")] List<Message> Messages,
-    [property: JsonPropertyName("max_tokens")] int Max_tokens,
-    [property: JsonPropertyName("temperature")] double temperature);
-
-public record Choice([property: JsonPropertyName("role")] int Index,
-    [property: JsonPropertyName("finish_reason")] string FinishReason,
-    [property: JsonPropertyName("message")] Message Message);
-
-public record Usage([property: JsonPropertyName("completion_tokens")] int CompletionTokens,
-    [property: JsonPropertyName("prompt_tokens")] int PromptTokens,
-    [property: JsonPropertyName("total_tokens")] int TotalTokens);
-
-public record Completion(
-    [property: JsonPropertyName("role")] string Id,
-    [property: JsonPropertyName("object")] string Object,
-    [property: JsonPropertyName("created")] long Created,
-    [property: JsonPropertyName("model")] string Model,
-    [property: JsonPropertyName("choices")] List<Choice> Choices,
-    [property: JsonPropertyName("usage")] Usage Usage);
-
-#endregion Records
