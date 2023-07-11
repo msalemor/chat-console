@@ -11,7 +11,7 @@ var completion_tokens = 0;
 var history = new List<Message>();
 
 // Step 2 - Get the OpenAI KEY and URI
-// TODO: Modify the .env file with and add the API KEY and URI
+// TODO: Add a .env file and add the API KEY and URI
 DotEnv.Load();
 var api_key = Environment.GetEnvironmentVariable("OPENAI_KEY");
 var uri = Environment.GetEnvironmentVariable("OPENAI_URI");
