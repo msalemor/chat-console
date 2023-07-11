@@ -30,6 +30,7 @@ class Prompt:
 
 
 # Step 2 - Initial Configuration
+# Modify the .env file and add the API KEY and URI
 START_SYSTEM_MESSAGE = "You are a general assistant"
 history = []
 
