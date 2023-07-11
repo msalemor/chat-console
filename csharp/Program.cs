@@ -1,4 +1,4 @@
-// See https://aka.ms/new-console-template for more information
+﻿// See https://aka.ms/new-console-template for more information
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -26,7 +26,7 @@ client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("app
 client.DefaultRequestHeaders.Add("api-key", api_key);
 
 
-// Activate the bot for the first time
+// Step 4 - Activate the bot for the first time
 history.Add(new Message("system", SYSTEM_MESSAGE));
 var ans = await GetCompletionAsync(history);
 if (ans.Item1 is not null)
@@ -38,7 +38,7 @@ if (ans.Item1 is not null)
     completion_tokens = +ans.Item3;
 }
 
-// Step 4 - Enter the loop
+// Step 5 - Enter the loop
 while (true)
 {
     Console.WriteLine($"Tokens In: {prompt_tokens} Out: {completion_tokens} --> What is your question?\n");
