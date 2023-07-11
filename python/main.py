@@ -1,11 +1,12 @@
+# Note: Install the requirements -> pip install -r requirements.txt
+
 import os
 from typing import List
 from dotenv import load_dotenv
 import requests
 import json
 
-
-# Step 1 - Define the Json Models
+# Step 1 - Define the Class models for JSON serialization
 class Message:
     def __init__(self, Role: str, Content: str):
         self.role = Role
@@ -30,20 +31,17 @@ class Prompt:
 
 
 # Step 2 - Initial Configuration
-# TODO: Add a .env file and add the API KEY and URI
 START_SYSTEM_MESSAGE = "You are a general assistant"
 history = []
+headers = {"Content-Type": "application/json", "api-key": f"{api_key}"}
 
 # Step 3 - Load the Environment Variables
+# TODO: Add a .env file and add the API KEY and URI
 load_dotenv()
 uri = os.getenv("OPENAI_URI")
 api_key = os.getenv("OPENAI_KEY")
 
-# Step 4 - Configure the Http Client headers
-headers = {"Content-Type": "application/json", "api-key": f"{api_key}"}
-
-
-# Step 5 - Define the Post Method
+# Step 4 - Define the Post Method
 def post(history: List[Message]):
     prompt = json.dumps(Prompt(history, 100, 0.3).__dict__())
     response = requests.post(uri, data=prompt, headers=headers)
@@ -61,6 +59,7 @@ def post(history: List[Message]):
 
 
 def run():
+    # Step 5 - Run the application loop
     history.append(Message("system", START_SYSTEM_MESSAGE))
     completion, tin, tout = post(history)
     while True:
@@ -79,6 +78,5 @@ def run():
             history.append(Message("system", completion))
 
 
-if __name__ == "__main__":
-    # Step 6 - Run the application loop
+if __name__ == "__main__":    
     run()
