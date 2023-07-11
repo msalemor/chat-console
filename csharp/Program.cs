@@ -1,11 +1,10 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using dotenv.net;
 
 // Step 1 - Some setup 
-
 const string SYSTEM_MESSAGE = "You are a general assistant";
 var prompt_tokens = 0;
 var completion_tokens = 0;
@@ -46,6 +45,7 @@ while (true)
     var prompt = Console.ReadLine();
     if (string.Compare(prompt, "quit", StringComparison.InvariantCultureIgnoreCase) == 0)
     {
+        Console.WriteLine("Goodbye");
         break;
     }
     if (string.Compare(prompt, "history", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -68,30 +68,6 @@ while (true)
     }
 }
 return;
-
-// Supporting classes and methods
-public record Message([property: JsonPropertyName("role")] string Role,
-    [property: JsonPropertyName("content")] string Content);
-
-public record Prompt([property: JsonPropertyName("messages")] List<Message> Messages,
-    [property: JsonPropertyName("max_tokens")] int Max_tokens,
-    [property: JsonPropertyName("temperature")] double temperature);
-
-public record Choice([property: JsonPropertyName("role")] int Index,
-    [property: JsonPropertyName("finish_reason")] string FinishReason,
-    [property: JsonPropertyName("message")] Message Message);
-
-public record Usage([property: JsonPropertyName("completion_tokens")] int CompletionTokens,
-    [property: JsonPropertyName("prompt_tokens")] int PromptTokens,
-    [property: JsonPropertyName("total_tokens")] int TotalTokens);
-
-public record Completion(
-    [property: JsonPropertyName("role")] string Id,
-    [property: JsonPropertyName("object")] string Object,
-    [property: JsonPropertyName("created")] long Created,
-    [property: JsonPropertyName("model")] string Model,
-    [property: JsonPropertyName("choices")] List<Choice> Choices,
-    [property: JsonPropertyName("usage")] Usage Usage);
 
 async Task<Tuple<string?, int, int, int>> GetCompletionAsync(List<Message> history)
 {
@@ -123,3 +99,26 @@ async Task<Tuple<string?, int, int, int>> GetCompletionAsync(List<Message> histo
     return new Tuple<string?, int, int, int>(null, 0, 0, 0); ;
 }
 
+// Supporting classes and methods
+public record Message([property: JsonPropertyName("role")] string Role,
+    [property: JsonPropertyName("content")] string Content);
+
+public record Prompt([property: JsonPropertyName("messages")] List<Message> Messages,
+    [property: JsonPropertyName("max_tokens")] int Max_tokens,
+    [property: JsonPropertyName("temperature")] double temperature);
+
+public record Choice([property: JsonPropertyName("role")] int Index,
+    [property: JsonPropertyName("finish_reason")] string FinishReason,
+    [property: JsonPropertyName("message")] Message Message);
+
+public record Usage([property: JsonPropertyName("completion_tokens")] int CompletionTokens,
+    [property: JsonPropertyName("prompt_tokens")] int PromptTokens,
+    [property: JsonPropertyName("total_tokens")] int TotalTokens);
+
+public record Completion(
+    [property: JsonPropertyName("role")] string Id,
+    [property: JsonPropertyName("object")] string Object,
+    [property: JsonPropertyName("created")] long Created,
+    [property: JsonPropertyName("model")] string Model,
+    [property: JsonPropertyName("choices")] List<Choice> Choices,
+    [property: JsonPropertyName("usage")] Usage Usage);
