@@ -71,6 +71,7 @@ while (true)
 }
 return;
 
+// Supporting classes and methods
 async Task<Tuple<string?, int, int, int>> GetCompletionAsync(List<Message> history)
 {
     var prompt = new Prompt(history, 100, 0.3d);
@@ -101,7 +102,6 @@ async Task<Tuple<string?, int, int, int>> GetCompletionAsync(List<Message> histo
     return new Tuple<string?, int, int, int>(null, 0, 0, 0); ;
 }
 
-// Supporting classes and methods
 public record Message([property: JsonPropertyName("role")] string Role,
     [property: JsonPropertyName("content")] string Content);
 
