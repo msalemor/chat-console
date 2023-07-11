@@ -1,0 +1,12 @@
+POST https://alemorfr.openai.azure.com/openai/deployments/gpt/chat/completions?api-version=2023-03-15-preview HTTP/1.1
+content-type: application/json
+api-key: 32c879df39154dafae39e450c89f0c0a
+
+{
+    "messages": [
+        {"role":"system","content":"You are an AI assistant that helps people find information."},
+        {"role":"user","content":"What is the speed of light?"}
+    ],
+  "max_tokens": 100,
+  "temperature": 0.3
+}
