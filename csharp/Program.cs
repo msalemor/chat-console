@@ -4,14 +4,14 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using dotenv.net;
 
-// Step 1 - Setup 
+// Step 1 - Some setup 
 const string SYSTEM_MESSAGE = "You are a general assistant";
 var prompt_tokens = 0;
 var completion_tokens = 0;
 var history = new List<Message>();
 
-// Step 2 - Get the OpenAI credentials
-// TODO: Modify the .env file with the URI and KEY
+// Step 2 - Get the OpenAI KEY and URI
+// TODO: Modify the .env file with and add the API KEY and URI
 DotEnv.Load();
 var api_key = Environment.GetEnvironmentVariable("OPENAI_KEY");
 var uri = Environment.GetEnvironmentVariable("OPENAI_URI");
@@ -105,7 +105,7 @@ async Task<Tuple<string?, int, int, int>> GetCompletionAsync(List<Message> histo
 
 #region Records
 
-// Utility Records
+// Utility Records. Records are Immutable
 public record Message([property: JsonPropertyName("role")] string Role,
     [property: JsonPropertyName("content")] string Content);
 
