@@ -73,7 +73,10 @@ def run():
         if prompt == "quit":
             print("Goodbye!")
             break
-        elif prompt == "history":
+        elif prompt == "history": 
+            print('History:\n')
+            for message in history:
+                print(f'Role: {message.role} Content: {message.content}')
             continue
         else:
             history.append(Message("user", prompt))
