@@ -59,9 +59,11 @@ def post(history: List[Message]):
 
 
 def run():
-    # Step 5 - Run the application loop
+    # Step 5 - Activate the bot for the first time
     history.append(Message("system", START_SYSTEM_MESSAGE))
     completion, tin, tout = post(history)
+
+    # Step 6 - Enter the while loop
     while True:
         prompt = input(f"\nTokens In: {tin} Out: {tout} --> What is your question?\n\n")
         if prompt == "quit":
