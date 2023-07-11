@@ -7,7 +7,8 @@ import requests
 import json
 
 # Step 1 - Initial Configuration
-# Define the Class models for JSON serialization
+
+# Define the models
 class Message:
     def __init__(self, Role: str, Content: str):
         self.role = Role
@@ -29,7 +30,8 @@ class Prompt:
             "max_tokens": self.max_tokens,
             "temperature": self.temperature,
         }
-
+        
+# Post method for ChatGPT
 def post(history: List[Message]):
     prompt = json.dumps(Prompt(history, 100, 0.3).__dict__())
     response = requests.post(uri, data=prompt, headers=headers)
