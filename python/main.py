@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 import requests
 import json
 
-# Step 1 - Define the Class models for JSON serialization
+# Step 1 - Initial Configuration
+# Define the Class models for JSON serialization
 class Message:
     def __init__(self, Role: str, Content: str):
         self.role = Role
@@ -29,19 +30,6 @@ class Prompt:
             "temperature": self.temperature,
         }
 
-
-# Step 2 - Initial Configuration
-START_SYSTEM_MESSAGE = "You are a general assistant"
-history = []
-headers = {"Content-Type": "application/json", "api-key": f"{api_key}"}
-
-# Step 3 - Load the Environment Variables
-# TODO: Add a .env file and add the API KEY and URI
-load_dotenv()
-uri = os.getenv("OPENAI_URI")
-api_key = os.getenv("OPENAI_KEY")
-
-# Step 4 - Define the Post Method
 def post(history: List[Message]):
     prompt = json.dumps(Prompt(history, 100, 0.3).__dict__())
     response = requests.post(uri, data=prompt, headers=headers)
@@ -58,10 +46,24 @@ def post(history: List[Message]):
         return (None, 0, 0)
 
 
+START_SYSTEM_MESSAGE = "You are a general assistant"
+history = []
+
+# Step 2 - Load the Environment Variables
+# TODO: Add a .env file and add the API KEY and URI
+load_dotenv()
+uri = os.getenv("OPENAI_URI")
+api_key = os.getenv("OPENAI_KEY")
+
+# Step 3 - Configure the Http header
+headers = {"Content-Type": "application/json", "api-key": f"{api_key}"}
+
+
 def run():
-    # Step 5 - Activate the bot for the first time
+    # Step 4 - Activate the bot for the first time
     history.append(Message("system", START_SYSTEM_MESSAGE))
     completion, tin, tout = post(history)
+    print(completion+"\n")
 
     # Step 6 - Enter the while loop
     while True:
