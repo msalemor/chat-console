@@ -1,3 +1,19 @@
+// mkdir gptbot && cd gptbot
+// dotnet new console
+// dotnet add package dotenv.net
+// touch .env
+// code .
+
+// Get an OpenAI API key and URL from the Azure Portal
+// Calling an API from requests.http
+// Converting the prompt and completion json to c# records using Bing
+
+// References:
+// OpenAI API Reference
+//   https://learn.microsoft.com/en-us/azure/cognitive-services/openai/reference
+// Prompt Engineering
+//   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
+
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
