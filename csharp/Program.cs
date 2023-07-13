@@ -14,6 +14,7 @@
 // Prompt Engineering
 //   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
 
+
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -75,7 +76,8 @@ while (true)
         foreach (var message in conversation)
         {
             ColorWrite("Role: ", ConsoleColor.Blue, false);
-            ColorWrite($"{message.Role}", ConsoleColor.Green, false);
+            var formattedRole = message.Role == Role.user.ToString() ? "user  " : "system";
+            ColorWrite($"{formattedRole}", ConsoleColor.Green, false);
             ColorWrite(" Content: ", ConsoleColor.Blue, false);
             var outMsg = message.Content.Length < 60 ? message.Content : message.Content.Substring(0, 60) + "...";
             ColorWrite($"{outMsg}", ConsoleColor.Green);
